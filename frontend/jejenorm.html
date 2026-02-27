@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jejenorm App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background-color: #121212;
+            color: #fff;
+            font-size: 16px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #fff;
+            box-shadow: 0 0 10px #ffffff33;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            background-color: #fff;
+            color: #121212;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        #result {
+            padding: 15px;
+            background-color: #121212;
+            border: 1px solid #333;
+            border-radius: 10px;
+            min-height: 50px;
+            font-size: 16px;
+            white-space: pre-wrap;
+        }
+
+        .samples {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .sample-item {
+            background: #121212;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .sample-item:hover {
+            background: #2a2a2a;
+        }
+
+        .hint {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">⚡</div>
+        <h2>Jejenorm</h2>
+        <p class="hint">Filipino Slang & Jejemon Normalizer</p>
+
+        <textarea id="userText" rows="5" placeholder="Type jejemon text here..."></textarea><br>
+        <button onclick="normalizeText()">Normalize</button>
+
+        <h3>Normalized Text:</h3>
+        <p id="result"></p>
+
+        <h3>Try These Jejemon Samples (Click to Copy)</h3>
+        <div class="samples">
+            <div class="sample-item" onclick="copySample(this)">
+                H3y u!!! kamuzta nA? mIsS nA kTa sObRa!!!
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                cNu bA aKo sA bUhAy m0? pLz rEpLy nMn u!!!
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                lOvE u 4eVeR!!! dI kItA mAkAkAlImUtAn kHt aNoNg mNgYrI!!!
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                pAgOd nA aKo sA bUhAy pRo kAyA pA rInGu hAnGgAnG hUlI!!!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function normalizeText() {
+            const text = document.getElementById("userText").value;
+
+            const response = await fetch("http://127.0.0.1:8000/normalize", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerText = data.normalized;
+        }
+
+        function copySample(element) {
+            const text = element.innerText;
+            document.getElementById("userText").value = text;
+        }
+    </script>
+</body>
+</html>
