@@ -12,28 +12,60 @@
         }
 
         body {
-            background-color: #121212;
+            background-color: transparent;
             color: #ffffff;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start;
+            min-height: 100vh;
             padding: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .container {
-            background-color: #1e1e1e;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, rgba(20, 30, 50, 0.95) 0%, rgba(10, 20, 40, 0.95) 100%);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0, 168, 255, 0.3), 0 0 60px rgba(0, 168, 255, 0.15), inset 0 0 30px rgba(0, 168, 255, 0.1);
             width: 100%;
             max-width: 700px;
             text-align: center;
+            position: relative;
+            z-index: 10;
+            border: 2px solid #00a8ff;
+            animation: containerGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes containerGlow {
+            0%, 100% { box-shadow: 0 0 40px rgba(0, 168, 255, 0.3), 0 0 60px rgba(0, 168, 255, 0.15), inset 0 0 30px rgba(0, 168, 255, 0.1); }
+            50% { box-shadow: 0 0 50px rgba(0, 168, 255, 0.5), 0 0 80px rgba(0, 168, 255, 0.25), inset 0 0 30px rgba(0, 168, 255, 0.15); }
         }
 
         h2 {
             margin-bottom: 10px;
-            font-size: 28px;
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00a8ff 0%, #00e8ff 50%, #00a8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 168, 255, 0.4);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 30px rgba(0, 168, 255, 0.4); }
+            50% { text-shadow: 0 0 50px rgba(0, 168, 255, 0.8); }
         }
 
         .logo {
@@ -45,51 +77,94 @@
             width: 100%;
             padding: 15px;
             border-radius: 10px;
-            border: 1px solid #333;
-            background-color: #121212;
-            color: #fff;
+            border: 2px solid #00a8ff;
+            background-color: rgba(10, 20, 40, 0.8);
+            color: #00e8ff;
             font-size: 16px;
             resize: vertical;
             transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(0, 168, 255, 0.1);
         }
 
         textarea:focus {
             outline: none;
-            border-color: #fff;
-            box-shadow: 0 0 10px #ffffff33;
+            border-color: #00e8ff;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.5), inset 0 0 10px rgba(0, 168, 255, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #008aaa;
         }
 
         button {
             margin-top: 15px;
-            padding: 12px 25px;
-            border: none;
+            padding: 12px 30px;
+            border: 2px solid #00a8ff;
             border-radius: 10px;
-            background-color: #fff;
-            color: #121212;
+            background: linear-gradient(135deg, #00a8ff 0%, #0080ff 100%);
+            color: #fff;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.3);
         }
 
         button:hover {
-            background-color: #e0e0e0;
+            background: linear-gradient(135deg, #0080ff 0%, #00a8ff 100%);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         h3 {
             margin-top: 25px;
             margin-bottom: 10px;
             font-size: 20px;
+            color: #00e8ff;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.3);
         }
 
         #result {
             padding: 15px;
-            background-color: #121212;
-            border: 1px solid #333;
+            background-color: rgba(10, 20, 40, 0.8);
+            border: 2px solid #00a8ff;
             border-radius: 10px;
             min-height: 50px;
             font-size: 16px;
             white-space: pre-wrap;
+            color: #00e8ff;
+            box-shadow: inset 0 0 10px rgba(0, 168, 255, 0.1);
+        }
+
+        .sentiment {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .sentiment.positive {
+            background-color: #1e4620;
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+
+        .sentiment.negative {
+            background-color: #461e1e;
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+
+        .sentiment.neutral {
+            background-color: #1e3a46;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
         }
 
         .samples {
@@ -98,18 +173,22 @@
         }
 
         .sample-item {
-            background: #121212;
-            border: 1px solid #333;
+            background: rgba(10, 20, 40, 0.8);
+            border: 1px solid #008aaa;
             border-radius: 8px;
             padding: 10px;
             margin-bottom: 8px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s ease;
             font-size: 14px;
+            color: #00e8ff;
         }
 
         .sample-item:hover {
-            background: #2a2a2a;
+            background: rgba(0, 168, 255, 0.1);
+            border-color: #00a8ff;
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.3);
+            transform: translateX(5px);
         }
 
         .hint {
@@ -117,19 +196,40 @@
             opacity: 0.7;
             margin-top: 5px;
         }
+
+        /* Anime Girl GIF */
+        #animeGirlGif {
+            position: relative;
+            width: 100px;
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(0, 168, 255, 0.6));
+            animation: bobbing 3s ease-in-out infinite;
+        }
+
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
     </style>
 </head>
 <body>
+    <canvas id="matrixCanvas"></canvas>
+
     <div class="container">
-        <div class="logo">⚡</div>
-        <h2>Jejenorm</h2>
-        <p class="hint">Filipino Slang & Jejemon Normalizer</p>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;">
+            <img id="animeGirlGif" src="https://i.pinimg.com/originals/80/7b/5c/807b5c4b02e765bb4930b7c66662ef4b.gif" alt="Cute Pixel Cat">
+            <div style="text-align: center;">
+                <h2>Jejenorm</h2>
+                <p class="hint">Filipino Slang & Jejemon Normalizer</p>
+            </div>
+        </div>
 
         <textarea id="userText" rows="5" placeholder="Type jejemon text here..."></textarea><br>
         <button onclick="normalizeText()">Normalize</button>
 
         <h3>Normalized Text:</h3>
         <p id="result"></p>
+        <div id="sentimentDisplay"></div>
 
         <h3>Try These Jejemon Samples (Click to Copy)</h3>
         <div class="samples">
@@ -145,23 +245,109 @@
             <div class="sample-item" onclick="copySample(this)">
                 pAgOd nA aKo sA bUhAy pRo kAyA pA rInGu hAnGgAnG hUlI!!!
             </div>
+            <div class="sample-item" onclick="copySample(this)">
+                g00d m0rN1ng s0l3!!! B00dz n0..kAyA mu nA pwEde k@seXyaNg sum@m@ kHt taP0s nA???
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                aKa r14diX 0f t3h fr0Nt pl4Y4 LOvE hOaRsE g0dZ bUhAy 2 3v3rY0n3 kNa0l q L0VeR u 4eVr!!!
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                H3y g0rl frnD !!k0y4 nNG AkO s4 lYf3 hw3 kDetrT??st4y C00l 4lWaYz P4L!! k@g4nd@ MoS!! 
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                T1nG cNu kA sA sch00l ah... nMn P0s1 aKw pwEd3 kAyA g3T d00rS t0 l1f3 rN4...haHaHa!!!
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                S0rY i c@nt taLk t0 j00 q lng dZ i m d0iNg hmW0rK!! sEe u l@t3r k0y4...luVu pwUd s8888!!!
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                hey d0Sz u L1Ked d4 p@rT i 1Nv1T3d u l@st n1tE?? c0z i r34LY3 h@d f0n w/ u dHZ...GaMbUh!!!
+            </div>
+            <div class="sample-item" onclick="copySample(this)">
+                g4L1T 4K0 s@ 1nYo!!! pWeD3 xA k@s1 mOkA hNdI j00 kAyA pUmUNtA dIt?? 5uck 1t...
+            </div>
         </div>
     </div>
 
     <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(0);
+        
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00a8ff';
+            ctx.font = `${fontSize}px 'Courier New', monospace`;
+            ctx.shadowColor = '#00a8ff';
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            
+            for (let i = 0; i < drops.length; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        
+        function animateMatrix() {
+            drawMatrix();
+            requestAnimationFrame(animateMatrix);
+        }
+        
+        animateMatrix();
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
         async function normalizeText() {
             const text = document.getElementById("userText").value;
 
-            const response = await fetch("http://127.0.0.1:8000/normalize", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ text: text })
-            });
+            if (!text.trim()) {
+                document.getElementById("result").innerText = "Please enter some text";
+                document.getElementById("sentimentDisplay").innerHTML = "";
+                return;
+            }
 
-            const data = await response.json();
-            document.getElementById("result").innerText = data.normalized;
+            try {
+                const response = await fetch("http://127.0.0.1:8000/normalize", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const data = await response.json();
+                document.getElementById("result").innerText = data.normalized;
+                
+                // Display sentiment with color coding
+                const sentimentDiv = document.getElementById("sentimentDisplay");
+                const sentimentClass = data.sentiment.toLowerCase();
+                sentimentDiv.innerHTML = `<div class="sentiment ${sentimentClass}">
+                    Sentiment: ${data.sentiment.toUpperCase()}
+                </div>`;
+            } catch (error) {
+                document.getElementById("result").innerText = "Error connecting to backend: " + error.message;
+                document.getElementById("sentimentDisplay").innerHTML = "";
+            }
         }
 
         function copySample(element) {
@@ -169,5 +355,6 @@
             document.getElementById("userText").value = text;
         }
     </script>
+    
 </body>
 </html>

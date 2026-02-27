@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from jejennorm import normalize_text
+from jejennorm import normalize_text, detect_sentiment, load_dataset
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -13,13 +13,22 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+# Load the Filipino slang dataset at startup
+ngram_rules = load_dataset()
+
 class TextInput(BaseModel):
     text: str
 
 @app.post("/normalize")
 def normalize(input: TextInput):
-    result = normalize_text(input.text)
-    return {"normalized": result}
+    normalized = normalize_text(input.text, ngram_rules)
+    sentiment = detect_sentiment(input.text)
+    return {
+        "normalized": normalized,
+        "sentiment": sentiment,
+        "original_length": len(input.text),
+        "normalized_length": len(normalized)
+    }
 
 @app.get("/")
 def root():
